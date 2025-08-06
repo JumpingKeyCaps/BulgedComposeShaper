@@ -42,7 +42,7 @@ fun BulgedShapeDemo(modifier: Modifier = Modifier) {
 
     // Chargez l'ImageBitmap
     val imageBitmap: ImageBitmap = remember {
-        BitmapFactory.decodeResource(context.resources, R.drawable.cover_example_3).asImageBitmap()
+        BitmapFactory.decodeResource(context.resources, R.drawable.demopic).asImageBitmap()
     }
 
     // Créez une instance de votre forme bombée personnalisée

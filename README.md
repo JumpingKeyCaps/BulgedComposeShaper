@@ -56,6 +56,22 @@ Card(
 )
 ```
 
+## Notes on Complex Shape Clipping
+
+ - It's important to note a `specific behavior within Jetpack Compose's rendering engine` concerning the clipping of complex custom shapes (`Outline.Generic`, such as BulgedRoundedRectangleShape).
+   
+ - While components like Card apply these shapes perfectly to their backgrounds, clipping a simple Image or other content using Modifier.graphicsLayer(clip = true, shape = someShape) might sometimes fail to fully respect the intricate curves of the edges, only clipping the corners.
+
+ - This behavior is due to Compose's `internal rendering optimizations`.
+
+ - The presence of a RenderEffect (even a "passthrough" shader that visually does nothing to the image) appears to force Compose to utilize a more comprehensive and precise rendering pipeline.
+
+ - This pipeline accurately rasterizes (converts to pixels) the graphic layer's content, fully adhering to the complex Path of the custom shape.
+   
+ - The BulgedImage composable encapsulates this workaround by `employing a minimalist AGSL shader` to activate this robust rendering , ensuring your image is always perfectly contained within the bulged shape.
+
+---
+
 ## 🔮 Roadmap (WIP)
 
 - 🖐️ **Touch-Based Shape Deformation**  

@@ -1,0 +1,10 @@
+// This shader simply returns the input texture/bitmap without any modification.
+// Its purpose is to trigger the full rendering pipeline in Compose's graphicsLayer
+// to ensure proper clipping of complex shapes.
+uniform shader inputShader;
+
+half4 main(float2 fragCoord) {
+    // Just sample the input shader at the current fragment coordinate.
+    // No deformation, no color changes.
+    return inputShader.eval(fragCoord);
+}

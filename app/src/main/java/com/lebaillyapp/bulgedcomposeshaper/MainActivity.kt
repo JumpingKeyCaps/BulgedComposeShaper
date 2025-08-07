@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                    )
                    )) {
                        // 1 - Simple use demo
-                       BulgedShapeDemo(modifier = Modifier.size(250.dp).align(Alignment.Center))
+                       BulgedShapeDemo(modifier = Modifier.align(Alignment.Center))
                    }
                 }
             }

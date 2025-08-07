@@ -33,109 +33,115 @@ import androidx.compose.ui.unit.Dp
  *
  * Note: Bulging is applied uniformly to all four sides.
  */
+
 class BulgedRoundedRectangleShape(
     private val cornerRadius: Dp,
-    private val bulgeAmount: Float = 0.05f
+    private val bulgeAmount: Float = 0f // Bulge amount as a normalized factor (0 to 1, or more)
 ) : Shape {
+
     override fun createOutline(
         size: Size,
         layoutDirection: LayoutDirection,
         density: Density
     ): Outline {
-        return Outline.Generic(Path().apply {
-            val width = size.width
-            val height = size.height
+        val path = Path()
+        val width = size.width
+        val height = size.height
+        val cornerPx = with(density) { cornerRadius.toPx() }
+        // Assure que le rayon ne dépasse pas la moitié de la plus petite dimension
+        val radius = cornerPx.coerceAtMost(minOf(width, height) / 2f)
 
-            // Convert corner radius from Dp to pixels
-            val cornerRadiusPx = with(density) { cornerRadius.toPx() }
+        // Calcule l'amplitude du bombement en pixels
+        // Le 0.5f ici est une base, à ajuster pour un bulge qui s'harmonise avec le radius
+        val bulgePx = minOf(width, height) * bulgeAmount * 0.5f
 
-            // Clamp corner radius to at most half of the smallest dimension
-            val actualCornerRadius = cornerRadiusPx.coerceAtMost(minOf(width, height) / 2f)
+        // Constante pour approximer un quart de cercle avec une courbe de Bézier cubique
+        val C = 0.5522847498f
 
-            // Calculate bulge amplitude as a fraction of the smallest dimension
-            val actualBulgeAmount = minOf(width, height) * bulgeAmount
+        // Coordonnées pour faciliter la lecture
+        val left = 0f
+        val top = 0f
+        val right = width
+        val bottom = height
 
-            val left = 0f
-            val top = 0f
-            val right = width
-            val bottom = height
+        // Points où les arcs de cercle "normaux" commenceraient/finiraient
+        val xRadius = radius
+        val yRadius = radius
 
-            // Start at top edge, right before the top-right corner arc
-            moveTo(right - actualCornerRadius, top)
+        // --- Construction du chemin ---
 
-            // 1. Top-right corner arc
-            arcTo(
-                rect = Rect(right - 2 * actualCornerRadius, top, right, top + 2 * actualCornerRadius),
-                startAngleDegrees = 270f,
-                sweepAngleDegrees = 90f,
-                forceMoveTo = false
-            )
+        // Commence juste après le coin supérieur gauche (sur le segment supérieur)
+        path.moveTo(left + xRadius, top)
 
-            // 2. Right side bulged cubic bezier
-            cubicTo(
-                x1 = right + actualBulgeAmount,
-                y1 = top + actualCornerRadius + (bottom - 2 * actualCornerRadius - (top + actualCornerRadius)) * 0.33f,
-                x2 = right + actualBulgeAmount,
-                y2 = top + actualCornerRadius + (bottom - 2 * actualCornerRadius - (top + actualCornerRadius)) * 0.66f,
-                x3 = right,
-                y3 = bottom - actualCornerRadius
-            )
+        // TOP-RIGHT corner (including bulge)
+        // Courbe de Bézier pour aller du point (left + xRadius, top) à (right - xRadius, top)
+        // tout en bombant vers le haut.
+        // Les points de contrôle sont calculés pour "tirer" la courbe et se raccorder en douceur.
+        path.cubicTo(
+            left + xRadius + (width - 2 * xRadius) * 0.25f, top - bulgePx, // CP1
+            right - xRadius - (width - 2 * xRadius) * 0.25f, top - bulgePx, // CP2
+            right - xRadius, top // End point
+        )
 
-            // 3. Bottom-right corner arc
-            arcTo(
-                rect = Rect(right - 2 * actualCornerRadius, bottom - 2 * actualCornerRadius, right, bottom),
-                startAngleDegrees = 0f,
-                sweepAngleDegrees = 90f,
-                forceMoveTo = false
-            )
+        // TOP-RIGHT ARC (partie arrondie "normale" du coin)
+        path.cubicTo(
+            right - xRadius + xRadius * C, top, // CP1 for arc
+            right, top + yRadius - yRadius * C, // CP2 for arc
+            right, top + yRadius // End point of arc
+        )
 
-            // 4. Bottom side bulged cubic bezier
-            cubicTo(
-                x1 = right - actualCornerRadius - (right - 2 * actualCornerRadius - (left + actualCornerRadius)) * 0.33f,
-                y1 = bottom + actualBulgeAmount,
-                x2 = right - actualCornerRadius - (right - 2 * actualCornerRadius - (left + actualCornerRadius)) * 0.66f,
-                y2 = bottom + actualBulgeAmount,
-                x3 = left + actualCornerRadius,
-                y3 = bottom
-            )
+        // RIGHT-BOTTOM corner (including bulge)
+        // Courbe de Bézier pour aller de (right, top + yRadius) à (right, bottom - yRadius)
+        // tout en bombant vers la droite.
+        path.cubicTo(
+            right + bulgePx, top + yRadius + (height - 2 * yRadius) * 0.25f, // CP1
+            right + bulgePx, bottom - yRadius - (height - 2 * yRadius) * 0.25f, // CP2
+            right, bottom - yRadius // End point
+        )
 
-            // 5. Bottom-left corner arc
-            arcTo(
-                rect = Rect(left, bottom - 2 * actualCornerRadius, left + 2 * actualCornerRadius, bottom),
-                startAngleDegrees = 90f,
-                sweepAngleDegrees = 90f,
-                forceMoveTo = false
-            )
+        // BOTTOM-RIGHT ARC
+        path.cubicTo(
+            right, bottom - yRadius + yRadius * C,
+            right - xRadius + xRadius * C, bottom,
+            right - xRadius, bottom
+        )
 
-            // 6. Left side bulged cubic bezier
-            cubicTo(
-                x1 = left - actualBulgeAmount,
-                y1 = bottom - actualCornerRadius - (bottom - 2 * actualCornerRadius - (top + actualCornerRadius)) * 0.33f,
-                x2 = left - actualBulgeAmount,
-                y2 = bottom - actualCornerRadius - (bottom - 2 * actualCornerRadius - (top + actualCornerRadius)) * 0.66f,
-                x3 = left,
-                y3 = top + actualCornerRadius
-            )
+        // BOTTOM-LEFT corner (including bulge)
+        // Courbe de Bézier pour aller de (right - xRadius, bottom) à (left + xRadius, bottom)
+        // tout en bombant vers le bas.
+        path.cubicTo(
+            right - xRadius - (width - 2 * xRadius) * 0.25f, bottom + bulgePx,
+            left + xRadius + (width - 2 * xRadius) * 0.25f, bottom + bulgePx,
+            left + xRadius, bottom
+        )
 
-            // 7. Top-left corner arc
-            arcTo(
-                rect = Rect(left, top, left + 2 * actualCornerRadius, top + 2 * actualCornerRadius),
-                startAngleDegrees = 180f,
-                sweepAngleDegrees = 90f,
-                forceMoveTo = false
-            )
+        // BOTTOM-LEFT ARC
+        path.cubicTo(
+            left + xRadius - xRadius * C, bottom,
+            left, bottom - yRadius + yRadius * C,
+            left, bottom - yRadius
+        )
 
-            // 8. Top side bulged cubic bezier
-            cubicTo(
-                x1 = left + actualCornerRadius + (right - 2 * actualCornerRadius - (left + actualCornerRadius)) * 0.33f,
-                y1 = top - actualBulgeAmount,
-                x2 = left + actualCornerRadius + (right - 2 * actualCornerRadius - (left + actualCornerRadius)) * 0.66f,
-                y2 = top - actualBulgeAmount,
-                x3 = right - actualCornerRadius,
-                y3 = top
-            )
+        // LEFT-TOP corner (including bulge)
+        // Courbe de Bézier pour aller de (left, bottom - yRadius) à (left, top + yRadius)
+        // tout en bombant vers la gauche.
+        path.cubicTo(
+            left - bulgePx, bottom - yRadius - (height - 2 * yRadius) * 0.25f,
+            left - bulgePx, top + yRadius + (height - 2 * yRadius) * 0.25f,
+            left, top + yRadius
+        )
 
-            close()
-        })
+        // TOP-LEFT ARC (ferme le chemin)
+        path.cubicTo(
+            left, top + yRadius - yRadius * C,
+            left + xRadius - xRadius * C, top,
+            left + xRadius, top
+        )
+
+        path.close()
+        return Outline.Generic(path)
     }
 }
+
+
+

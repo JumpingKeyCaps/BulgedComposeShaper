@@ -1,10 +1,17 @@
-// This shader simply returns the input texture/bitmap without any modification.
-// Its purpose is to trigger the full rendering pipeline in Compose's graphicsLayer
-// to ensure proper clipping of complex shapes.
+// This is the input texture/bitmap that will be deformed.
+// It's typically the content of the Composable the shader is applied to.
 uniform shader inputShader;
 
+// The resolution (width, height) of the area where the shader is applied, in pixels.
+// Used for accurate coordinate calculations.
+uniform float2 uResolution;
+
 half4 main(float2 fragCoord) {
-    // Just sample the input shader at the current fragment coordinate.
-    // No deformation, no color changes.
-    return inputShader.eval(fragCoord);
+    // Initialize the total offset for the current pixel to zero.
+    // This will accumulate the deformation effect from all active pulses.
+    float2 totalOffset = float2(0.0, 0.0);
+
+    // Finally, sample the `inputShader` (the bitmap) at the deformed coordinates.
+    // `fragCoord + totalOffset` gives the new, shifted position to fetch the color from.
+    return inputShader.eval(fragCoord + totalOffset);
 }

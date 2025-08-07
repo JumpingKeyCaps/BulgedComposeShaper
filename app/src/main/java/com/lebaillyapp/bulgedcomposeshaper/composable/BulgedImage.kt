@@ -8,16 +8,26 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import com.lebaillyapp.bulgedcomposeshaper.R // Assurez-vous que R est importé correctement
+import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRoundedRectangleShape
 
 /**
  * A Composable that displays an ImageBitmap clipped to a custom Shape,
@@ -40,32 +50,40 @@ fun BulgedImage(
     modifier: Modifier = Modifier,
     bitmap: ImageBitmap,
     contentDescription: String?,
-    contentScale: ContentScale = ContentScale.Crop,
-    shape: Shape = RectangleShape
+    contentScale: ContentScale = ContentScale.Crop, // <<--- LAISSE ContentScale.Crop ICI !
+    shape: Shape = BulgedRoundedRectangleShape(cornerRadius = 10.dp, bulgeAmount = 0.02f)
 ) {
     val context = LocalContext.current
 
-    // Load the passthrough shader code once.
-    // This shader simply returns the input image without modification,
-    // but its presence in graphicsLayer ensures correct complex shape clipping.
-    val passthroughShaderCode = remember {
+    val shaderCode = remember {
         context.resources.openRawResource(R.raw.default_shader).bufferedReader().use { it.readText() }
     }
-    val passthroughShader = remember { RuntimeShader(passthroughShaderCode) }
+    val shader = remember { RuntimeShader(shaderCode) }
 
-    // Create the RenderEffect for the passthrough shader.
-    val passthroughRenderEffect = remember(passthroughShader) {
-        RenderEffect.createRuntimeShaderEffect(passthroughShader, "inputShader").asComposeRenderEffect()
+    var composableSize by remember { mutableStateOf(Size.Zero) }
+
+    SideEffect {
+        if (composableSize.width > 0f && composableSize.height > 0f) {
+            shader.setFloatUniform("uResolution", composableSize.width, composableSize.height)
+            // Retire uImageSize car le shader n'en a plus besoin pour le cropping,
+            // seulement pour le clamp.
+            // Le shader n'a besoin de rien d'autre que uResolution pour le clamp.
+        }
+    }
+
+    val renderEffect = remember(shader, composableSize) {
+        RenderEffect.createRuntimeShaderEffect(shader, "inputShader").asComposeRenderEffect()
     }
 
     Image(
-        painter = androidx.compose.ui.graphics.painter.BitmapPainter(bitmap),
+        painter = BitmapPainter(bitmap),
         contentDescription = contentDescription,
-        contentScale = contentScale,
+        contentScale = contentScale, // <<--- CE ContentScale.Crop EST LA VRAIE CLÉ !
         modifier = modifier
             .fillMaxSize()
-            // Apply the passthrough shader via graphicsLayer, passing the shape for clipping.
-            // This forces the rendering pipeline to correctly clip the complex shape.
-            .graphicsLayer(renderEffect = passthroughRenderEffect, clip = true, shape = shape)
+            .onSizeChanged { newSize ->
+                composableSize = newSize.toSize()
+            }
+            .graphicsLayer(renderEffect = renderEffect, clip = true, shape = shape)
     )
 }

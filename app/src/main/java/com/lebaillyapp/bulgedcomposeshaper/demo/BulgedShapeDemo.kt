@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.toSize
 import com.lebaillyapp.bulgedcomposeshaper.R
 import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRoundedRectangleShape
 import com.lebaillyapp.bulgedcomposeshaper.composable.BulgedImage
+import com.lebaillyapp.bulgedcomposeshaper.composable.BulgedImage2
 import kotlin.math.roundToInt
 
 /**
@@ -52,7 +53,7 @@ fun BulgedShapeDemo(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     val imageBitmap: ImageBitmap = remember {
-        BitmapFactory.decodeResource(context.resources, R.drawable.cover_example_2).asImageBitmap()
+        BitmapFactory.decodeResource(context.resources, R.drawable.demopic).asImageBitmap()
     }
 
     var cornerRadiusDp by remember { mutableStateOf(30f) }
@@ -76,14 +77,28 @@ fun BulgedShapeDemo(modifier: Modifier = Modifier) {
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp) // Élévation pour la Card du visualiseur
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
+
+                /**
                 BulgedImage(
                     modifier = Modifier.fillMaxSize(),
                     bitmap = imageBitmap,
                     contentDescription = "Image clippée avec forme bombée",
                     shape = shape
                 )
+                 */
+
+                BulgedImage2(
+                    modifier = Modifier.fillMaxSize(),
+                    bitmap = imageBitmap,
+                    contentDescription = "")
+
+
+
             }
         }
+
+
+
 
 
         Column(

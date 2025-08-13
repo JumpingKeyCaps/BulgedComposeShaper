@@ -1,0 +1,24 @@
+uniform shader inputShader;    // L'image originale
+uniform shader maskTexture;    // Le masque de forme pré-calculé
+uniform float2 uResolution;    // Résolution pour normaliser les coordonnées
+
+half4 main(float2 fragCoord) {
+    // Normalise les coordonnées pour échantillonner le masque
+    float2 normalizedCoord = fragCoord / uResolution;
+
+    // Échantillonne le masque (alpha seulement puisque c'est ALPHA_8)
+    float maskAlpha = maskTexture.eval(fragCoord).a;
+
+    // Si le masque est transparent, on retourne transparent
+    if (maskAlpha < 0.01) {
+        return half4(0.0, 0.0, 0.0, 0.0);
+    }
+
+    // Sinon, on échantillonne l'image originale
+    half4 originalColor = inputShader.eval(fragCoord);
+
+    // Applique l'alpha du masque pour un anti-aliasing propre
+    originalColor.a *= maskAlpha;
+
+    return originalColor;
+}

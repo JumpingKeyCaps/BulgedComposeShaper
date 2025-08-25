@@ -40,6 +40,7 @@ import com.lebaillyapp.bulgedcomposeshaper.R
 import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRoundedRectangleShape
 import com.lebaillyapp.bulgedcomposeshaper.composable.BulgedImage
 import com.lebaillyapp.bulgedcomposeshaper.composable.BulgedImage2
+import com.lebaillyapp.bulgedcomposeshaper.composable.BulgedImage3
 import kotlin.math.roundToInt
 
 /**
@@ -85,14 +86,20 @@ fun BulgedShapeDemo(modifier: Modifier = Modifier) {
                     contentDescription = "Image clippée avec forme bombée",
                     shape = shape
                 )
-                 */
+
 
                 BulgedImage2(
                     modifier = Modifier.fillMaxSize(),
                     bitmap = imageBitmap,
                     contentDescription = "")
 
+                 */
 
+                BulgedImage3(
+                    bitmap = imageBitmap,
+                    contentDescription = "Image clippée avec forme bombée",
+                    shape = shape
+                )
 
             }
         }

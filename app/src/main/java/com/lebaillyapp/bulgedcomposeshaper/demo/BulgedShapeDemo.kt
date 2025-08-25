@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.lebaillyapp.bulgedcomposeshaper.R
+import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRectangleSmoothShape
 import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRoundedRectangleShape
 import com.lebaillyapp.bulgedcomposeshaper.composable.BulgedImage
 import com.lebaillyapp.bulgedcomposeshaper.composable.BulgedImage2
@@ -59,9 +60,12 @@ fun BulgedShapeDemo(modifier: Modifier = Modifier) {
 
     var cornerRadiusDp by remember { mutableStateOf(30f) }
     var bulgeAmount by remember { mutableStateOf(0.03f) }
+    var cornerSmoothFactor by remember { mutableStateOf(0.3f) }
 
     val shape = remember(cornerRadiusDp, bulgeAmount) {
-        BulgedRoundedRectangleShape(cornerRadius = cornerRadiusDp.dp, bulgeAmount = bulgeAmount)
+        BulgedRectangleSmoothShape(cornerRadius = cornerRadiusDp.dp,
+            bulgeAmount = bulgeAmount,
+            cornerSmoothFactor = cornerSmoothFactor)
     }
 
     Column(
@@ -74,7 +78,7 @@ fun BulgedShapeDemo(modifier: Modifier = Modifier) {
                 .width(310.dp)
                 .height(310.dp),
             shape = shape,
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFBABABA)),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFFFFFFFF)),
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp) // Élévation pour la Card du visualiseur
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -124,6 +128,13 @@ fun BulgedShapeDemo(modifier: Modifier = Modifier) {
                 value = bulgeAmount,
                 onValueChange = { bulgeAmount = it },
                 valueRange = -0.5f..0.5f
+            )
+
+            Text("Corner Smooth Factor: ${"%.2f".format(cornerSmoothFactor)}", color = Color.Black)
+            Slider(
+                value = cornerSmoothFactor,
+                onValueChange = { cornerSmoothFactor = it },
+                valueRange = 0f..0.5f
             )
         }
     }

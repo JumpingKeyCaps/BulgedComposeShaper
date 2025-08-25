@@ -26,7 +26,7 @@ fun BulgedImage3(
 ) {
     // Calcul dynamique du zoom pour couvrir le bulge
     val minDim = min(bitmap.width, bitmap.height).toFloat()
-    val maxBulgePx = minDim * (shape as BulgedRectangleSmoothShape).bulgeAmount * 0.5f
+    val maxBulgePx = minDim * (shape as BulgedRectangleSmoothShape).bulgeAmount * 0.55f
     val zoomFactor = 1f + maxBulgePx / minDim
 
     Image(

@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRectangleSmoothShape
-import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRoundedRectangleShape
+import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.old.BulgedRoundedRectangleShape
 import kotlin.math.min
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)

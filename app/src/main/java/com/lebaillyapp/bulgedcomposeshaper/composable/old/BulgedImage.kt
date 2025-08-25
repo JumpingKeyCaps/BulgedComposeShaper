@@ -1,9 +1,8 @@
-package com.lebaillyapp.bulgedcomposeshaper.composable
+package com.lebaillyapp.bulgedcomposeshaper.composable.old
 
 import android.graphics.RenderEffect
 import android.graphics.RuntimeShader
 import android.os.Build
-import androidx.annotation.RawRes
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +15,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.graphicsLayer
@@ -27,7 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.lebaillyapp.bulgedcomposeshaper.R // Assurez-vous que R est importé correctement
-import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRoundedRectangleShape
+import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.old.BulgedRoundedRectangleShape
 
 /**
  * A Composable that displays an ImageBitmap clipped to a custom Shape,

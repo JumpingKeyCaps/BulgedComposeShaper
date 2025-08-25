@@ -1,19 +1,18 @@
-package com.lebaillyapp.bulgedcomposeshaper.bulgedShape
+package com.lebaillyapp.bulgedcomposeshaper.bulgedShape.old
 
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import kotlin.math.PI
 import kotlin.math.min
 import kotlin.math.sin
 
 /**
- * A custom [Shape] that renders a rounded rectangle with gently bulging sides.
+ * A custom [androidx.compose.ui.graphics.Shape] that renders a rounded rectangle with gently bulging sides.
  *
  * Each side of the rectangle can curve outward (convex) based on a configurable bulge factor.
  * This creates a more organic and fluid look compared to traditional sharp or flat-edged rectangles.
@@ -21,7 +20,7 @@ import kotlin.math.sin
  * Designed to be used in Jetpack Compose UIs where subtle visual personality is desired —
  * like interactive surfaces, image clipping, or animated shader effects.
  *
- * @param cornerRadius The corner radius in [Dp]. Ensures rounded corners that blend smoothly with the bulged sides.
+ * @param cornerRadius The corner radius in [androidx.compose.ui.unit.Dp]. Ensures rounded corners that blend smoothly with the bulged sides.
  * @param bulgeAmount The relative strength of the bulge on each side.
  * - `0f` means flat edges (classic rounded rectangle)
  * - Positive values (e.g., `0.05f`) create outward bulges.
@@ -130,7 +129,3 @@ class BulgedRoundedRectangleShape(
         return Outline.Generic(path)
     }
 }
-
-
-
-

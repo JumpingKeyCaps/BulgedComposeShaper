@@ -1,4 +1,4 @@
-package com.lebaillyapp.bulgedcomposeshaper.composable
+package com.lebaillyapp.bulgedcomposeshaper.composable.old
 
 import android.graphics.Bitmap
 import android.graphics.BitmapShader
@@ -10,7 +10,6 @@ import android.graphics.RenderEffect
 import android.graphics.RuntimeShader
 import android.graphics.Shader
 import android.os.Build
-import androidx.annotation.RawRes
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,12 +21,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Outline
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.asComposeRenderEffect
@@ -44,7 +41,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.lebaillyapp.bulgedcomposeshaper.R
-import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRoundedRectangleShape
+import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.old.BulgedRoundedRectangleShape
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -171,6 +168,6 @@ private fun androidx.compose.ui.geometry.Rect.toAndroidRect(): Rect {
     return Rect(left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
 }
 
-private fun androidx.compose.ui.geometry.RoundRect.toAndroidRectF(): RectF {
+private fun RoundRect.toAndroidRectF(): RectF {
     return RectF(left, top, right, bottom)
 }

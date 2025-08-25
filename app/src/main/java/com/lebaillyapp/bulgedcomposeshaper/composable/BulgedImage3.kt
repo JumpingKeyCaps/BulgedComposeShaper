@@ -13,20 +13,26 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRectangleSmoothShape
 import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRoundedRectangleShape
+import kotlin.math.min
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun BulgedImage3(
     bitmap: ImageBitmap,
     contentDescription: String? = null,
-    shape: Shape = BulgedRoundedRectangleShape(cornerRadius = 10.dp, bulgeAmount = 0.07f),
-    zoomFactor: Float = 1.2f // <-- ajuste ici le zoom pour couvrir le bulge
+    shape: Shape = BulgedRectangleSmoothShape(cornerRadius = 10.dp, bulgeAmount = 0.07f)
 ) {
+    // Calcul dynamique du zoom pour couvrir le bulge
+    val minDim = min(bitmap.width, bitmap.height).toFloat()
+    val maxBulgePx = minDim * (shape as BulgedRectangleSmoothShape).bulgeAmount * 0.5f
+    val zoomFactor = 1f + maxBulgePx / minDim
+
     Image(
         painter = BitmapPainter(bitmap),
         contentDescription = contentDescription,
-        contentScale = ContentScale.Crop, // obligatoire pour que ça déborde
+        contentScale = ContentScale.Crop,
         modifier = Modifier
             .fillMaxSize()
             .graphicsLayer {

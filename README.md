@@ -1,15 +1,14 @@
 # BulgedComposeShaper 
 
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-%2300C853.svg?style=for-the-badge&logo=android&logoColor=white)
-![AGSL Ready](https://img.shields.io/badge/AGSL%20Shaders-Android%2013%2B-blueviolet?style=for-the-badge)
 ![Min SDK](https://img.shields.io/badge/minSDK-33+-orange?style=for-the-badge)
 ![Kotlin](https://img.shields.io/badge/Kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white)
 
 
 **BulgedComposeShaper** is a tiny UI building block for Jetpack Compose:  
-it gives you a custom **curved shape** and a **Composable** that reacts to touch, clicks, and AGSL shaders.
+it gives you a custom **curved shape** and a **Composable** that reacts to touch and clicks.
 
-Use it to create more organic, dynamic, and visually expressive layouts — with minimal setup.
+Use it to create more organic, dynamic, and visually expressive layouts with minimal setup.
 
 This shape can be applied to any `Composable` (like `Card`, `Surface`, or `Box`) to give your UI a soft, modern, and elegant visual identity.
 
@@ -23,9 +22,6 @@ This shape can be applied to any `Composable` (like `Card`, `Surface`, or `Box`)
 
 - 🧩 **Seamless Compose Integration**  
   Works with all `shape`-enabled composables like `Card`, `Surface`, `Box`, and custom layouts.
-
-- 🌀 **AGSL-Ready**  
-  Built with support for Android 13+ **AGSL shaders** (Android Graphics Shading Language) to create interactive visual effects like ripple, glow, and morphing.
 
 - ✋ **Touch & Clipping Support**  
   Ensures perfect clipping around the curved shape, even when using `RenderEffect` or custom AGSL shaders.
@@ -56,30 +52,22 @@ Card(
 )
 ```
 
-## Notes on Complex Shape Clipping
+for Images:
 
- - It's important to note a `specific behavior within Jetpack Compose's rendering engine` concerning the clipping of complex custom shapes (`Outline.Generic`, such as BulgedRoundedRectangleShape).
-   
- - While components like Card apply these shapes perfectly to their backgrounds, clipping a simple Image or other content using Modifier.graphicsLayer(clip = true, shape = someShape) might sometimes fail to fully respect the intricate curves of the edges, only clipping the corners.
-
- - This behavior is due to Compose's `internal rendering optimizations`.
-
- - The presence of a RenderEffect (even a "passthrough" shader that visually does nothing to the image) appears to force Compose to utilize a more comprehensive and precise rendering pipeline.
-
- - This pipeline accurately rasterizes (converts to pixels) the graphic layer's content, fully adhering to the complex Path of the custom shape.
-   
- - The BulgedImage composable encapsulates this workaround by `employing a minimalist AGSL shader` to activate this robust rendering , ensuring your image is always perfectly contained within the bulged shape.
-
----
+```kotlin
+BulgedImage(
+    bitmap = myBitmap,
+    contentDescription = "Sample",
+    contentScale = ContentScale.Crop, // Critical!
+    shape = BulgedRoundedRectangleShape(20.dp, 0.02f)
+)
+```
 
 ## 🔮 Roadmap (WIP)
 
 - 🖐️ **Touch-Based Shape Deformation**  
   Animate and morph the shape in response to user interactions, such as touch position or pressure.  
   Goal: create an organic, responsive surface.
-
-- 💧 **AGSL Ripple Effects**  
-  Integrate a water-like ripple shader using AGSL (Android 13+), triggered directly at the user's touch point — clipped precisely to the custom shape.
 
 - 🎛️ **Interactive Playground UI**  
   A live preview screen with sliders to tweak `cornerRadius` and `bulgeAmount` values in real time, helping designers/devs quickly prototype the shape.
@@ -90,6 +78,7 @@ Card(
 - ⚙️ **Composable Modifier Extensions**  
   Provide utility functions like `.bulgedClip()` or `.bulgedBackground()` for even easier integration.
 
+
 ---
 
 ## 📦 Requirements
@@ -97,7 +86,6 @@ Card(
 - **Android Studio** (Giraffe or newer recommended)  
 - **Kotlin**  
 - **Jetpack Compose**  
-- **SDK 33+ (Android 13+)** — required for AGSL shader support
 
 ---
 

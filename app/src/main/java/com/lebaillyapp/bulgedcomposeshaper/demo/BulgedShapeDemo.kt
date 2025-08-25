@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
@@ -49,10 +50,11 @@ fun BulgedShapeDemo(modifier: Modifier = Modifier) {
         BitmapFactory.decodeResource(context.resources, R.drawable.demopic).asImageBitmap()
     }
 
-    var cornerRadiusDp by remember { mutableStateOf(30f) }
-    var bulgeAmount by remember { mutableStateOf(0.00f) }
-    var cornerSmoothFactor by remember { mutableStateOf(0.3f) }
-    var autoMode by remember { mutableStateOf(true) }
+    var cornerRadiusDp by remember { mutableStateOf(111f) }
+    var bulgeAmount by remember { mutableStateOf(-0.08f) }
+    var cornerSmoothFactor by remember { mutableStateOf(-0.48f) }
+    var autoMode by remember { mutableStateOf(false) }
+    var cardElevation by remember { mutableStateOf(4f) }
 
     fun updateCornerAndSmooth(bulge: Float) {
         val clampedBulge = bulge.coerceIn(0f, 0.10f)
@@ -79,11 +81,12 @@ fun BulgedShapeDemo(modifier: Modifier = Modifier) {
     ) {
         Card(
             modifier = Modifier
-                .width(310.dp)
-                .height(310.dp),
+                .width(210.dp)
+                .height(210.dp)
+                .shadow(cardElevation.dp, shape = shape), //   shadow natif
             shape = shape,
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFFFFFFF)),
-            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            elevation = CardDefaults.cardElevation(0.dp) // overlay M3 désactivé (sinon cumule)
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 BulgedImage3(
@@ -101,7 +104,7 @@ fun BulgedShapeDemo(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(3.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Switcher
+            // Switch
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
@@ -129,7 +132,7 @@ fun BulgedShapeDemo(modifier: Modifier = Modifier) {
                     bulgeAmount = it
                     if (autoMode) updateCornerAndSmooth(it)
                 },
-                valueRange = -0.1f..0.5f,
+                valueRange = -0.5f..0.5f,
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -137,7 +140,15 @@ fun BulgedShapeDemo(modifier: Modifier = Modifier) {
             Slider(
                 value = cornerSmoothFactor,
                 onValueChange = { cornerSmoothFactor = it },
-                valueRange = 0f..0.5f,
+                valueRange = -1.0f..1.0f,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Text("Elevation: ${"%.1f".format(cardElevation)}dp", color = Color.Black, fontSize = 12.sp)
+            Slider(
+                value = cardElevation,
+                onValueChange = { cardElevation = it },
+                valueRange = 0f..10f,
                 modifier = Modifier.fillMaxWidth()
             )
         }

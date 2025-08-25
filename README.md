@@ -23,12 +23,11 @@ This shape can be applied to any `Composable` (like `Card`, `Surface`, or `Box`)
 - 🧩 **Seamless Compose Integration**  
   Works with all `shape`-enabled composables like `Card`, `Surface`, `Box`, and custom layouts.
 
-- ✋ **Touch & Clipping Support**  
-  Ensures perfect clipping around the curved shape, even when using `RenderEffect` or custom AGSL shaders.
+- ✋ **Perfect Clipping for Images**  
+  Scale your bitmap (1.05–1.25x) with `ContentScale.Crop` for flawless clipping inside the bulged shape.
 
-- 🖼️ **Interactive ClippedImage Composable**  
-  A ready-to-use `Composable` that displays an image clipped with the custom shape,  
-  and handles touch events to trigger shape morphing or shader animations.  
+- 🖼️ **Ready-to-use ClippedImage Composable**  
+  Handles scaling and clipping automatically.
 
 ---
 

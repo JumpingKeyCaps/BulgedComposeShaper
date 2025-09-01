@@ -30,7 +30,7 @@ import com.lebaillyapp.bulgedcomposeshaper.composable.BulgedImage3
 @Composable
 fun BulgedAnimShapeDemo(
     modifier: Modifier = Modifier,
-    idleMode: Boolean = true
+    idleMode: Boolean = false
 ) {
     val context = LocalContext.current
     val imageBitmap: ImageBitmap = remember {
@@ -104,8 +104,8 @@ fun BulgedAnimShapeDemo(
     ) {
         Card(
             modifier = Modifier
-                .width(320.dp)
-                .height(320.dp)
+                .width(220.dp)
+                .height(220.dp)
                 .shadow(6.dp, shape)
                 .pointerInput(idleMode) {
                     if (!idleMode) {

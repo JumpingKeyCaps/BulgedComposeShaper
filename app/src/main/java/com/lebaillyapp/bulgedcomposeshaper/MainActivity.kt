@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.lebaillyapp.bulgedcomposeshaper.demo.BulgedAnimShapeDemo
 import com.lebaillyapp.bulgedcomposeshaper.demo.BulgedShapeDemo
 import com.lebaillyapp.bulgedcomposeshaper.ui.theme.BulgedComposeShaperTheme
 
@@ -27,7 +28,9 @@ class MainActivity : ComponentActivity() {
                    )
                    )) {
                        // 1 - Simple use demo
-                       BulgedShapeDemo(modifier = Modifier.align(Alignment.Center))
+                     //  BulgedShapeDemo(modifier = Modifier.align(Alignment.Center))
+                       // 2 - Animated demo
+                       BulgedAnimShapeDemo(modifier = Modifier.align(Alignment.Center))
                    }
                 }
             }

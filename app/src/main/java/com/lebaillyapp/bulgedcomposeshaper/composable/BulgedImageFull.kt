@@ -16,23 +16,23 @@ import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRectangleFullShape
 import kotlin.math.max
 import kotlin.math.min
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun BulgedImageFull(
     bitmap: ImageBitmap,
     contentDescription: String? = null,
     shape: Shape
 ) {
-    // Calcul dynamique du zoom pour couvrir le plus gros bulge
     val minDim = min(bitmap.width, bitmap.height).toFloat()
 
-    // On récupère le max bulge (si shape est notre nouvelle FullShape)
+    // Calcul du max bulge pour le zoom, compatible avec FullShape
     val maxBulge = when (shape) {
         is BulgedRectangleFullShape -> {
-            max(
-                max(shape.bulgeAmount.top, shape.bulgeAmount.bottom),
-                max(shape.bulgeAmount.left, shape.bulgeAmount.right)
-            )
+            listOf(
+                shape.bulgeAmount.top,
+                shape.bulgeAmount.right,
+                shape.bulgeAmount.bottom,
+                shape.bulgeAmount.left
+            ).maxOrNull() ?: 0f
         }
         is com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRectangleSmoothShape -> {
             shape.bulgeAmount
@@ -40,6 +40,7 @@ fun BulgedImageFull(
         else -> 0f
     }
 
+    // Zoom proportionnel au bulge
     val maxBulgePx = minDim * maxBulge * 0.55f
     val zoomFactor = 1f + maxBulgePx / minDim
 

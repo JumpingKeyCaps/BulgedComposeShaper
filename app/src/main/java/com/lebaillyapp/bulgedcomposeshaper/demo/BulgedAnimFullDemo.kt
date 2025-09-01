@@ -2,10 +2,8 @@ package com.lebaillyapp.bulgedcomposeshaper.demo
 
 import android.graphics.BitmapFactory
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,13 +11,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.lebaillyapp.bulgedcomposeshaper.R
-import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRectangleFullShape
-import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.CornerConfig
-import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.EdgeBulge
+import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.*
 import com.lebaillyapp.bulgedcomposeshaper.composable.BulgedImageFull
 
 @Composable
@@ -33,24 +28,28 @@ fun BulgedAnimFullDemo(
 
     // --- Demo parameters ---
     val demoCorners = CornerConfig(
-        topLeft = 40.dp,
-        topRight = 40.dp,
-        bottomRight = 40.dp,
-        bottomLeft = 40.dp
+        topLeft = 110.dp,
+        topRight = 110.dp,
+        bottomRight = 110.dp,
+        bottomLeft = 110.dp
     )
     val demoBulges = EdgeBulge(
         top = 0.10f,
-        right = 0.0f,
-        bottom = 0.0f,
-        left = 0.0f
+        right = 0.05f,
+        bottom = 0.15f,
+        left = 0.08f
     )
-    val cornerSmooth = 0.1f
+    val demoSmooth = CornerSmoothConfig(
+        topLeft = 0.4f,
+        topRight = 0.4f,
+        bottomRight = 0.4f,
+        bottomLeft = 0.4f
+    )
 
-    // --- Shape statique ---
     val demoShape = BulgedRectangleFullShape(
         cornerRadius = demoCorners,
         bulgeAmount = demoBulges,
-        cornerSmoothFactor = cornerSmooth
+        cornerSmoothConfig = demoSmooth
     )
 
     Column(

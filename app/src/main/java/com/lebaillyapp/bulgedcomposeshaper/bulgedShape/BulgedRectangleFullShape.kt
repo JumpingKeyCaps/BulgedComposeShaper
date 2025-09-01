@@ -1,5 +1,7 @@
 package com.lebaillyapp.bulgedcomposeshaper.bulgedShape
 
+
+
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
@@ -8,10 +10,9 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Dp
 import kotlin.math.PI
-import kotlin.math.sin
 import kotlin.math.min
+import kotlin.math.sin
 
-// Config en Dp pour l'utilisateur
 data class CornerConfig(
     val topLeft: Dp,
     val topRight: Dp,
@@ -19,7 +20,13 @@ data class CornerConfig(
     val bottomLeft: Dp
 )
 
-// Config des bords (bulge) en float
+data class CornerSmoothConfig(
+    val topLeft: Float,
+    val topRight: Float,
+    val bottomRight: Float,
+    val bottomLeft: Float
+)
+
 data class EdgeBulge(
     val top: Float,
     val right: Float,
@@ -27,7 +34,6 @@ data class EdgeBulge(
     val left: Float
 )
 
-// Conversion interne Dp -> Px
 private data class CornerPx(
     val topLeft: Float,
     val topRight: Float,
@@ -38,7 +44,7 @@ private data class CornerPx(
 class BulgedRectangleFullShape(
     private val cornerRadius: CornerConfig,
     val bulgeAmount: EdgeBulge,
-    private val cornerSmoothFactor: Float = 0.3f
+    private val cornerSmoothConfig: CornerSmoothConfig = CornerSmoothConfig(0.3f, 0.3f, 0.3f, 0.3f)
 ) : Shape {
 
     override fun createOutline(
@@ -57,14 +63,18 @@ class BulgedRectangleFullShape(
             bottomLeft = with(density) { cornerRadius.bottomLeft.toPx() }
         )
 
+        val C = 0.5522847498f
         val left = 0f
         val top = 0f
         val right = width
         val bottom = height
-        val s = cornerSmoothFactor
-        val C = 0.5522847498f
 
-        // --- Helper ---
+        // Clamp smooth factors entre 0 et 1
+        val sTL = cornerSmoothConfig.topLeft.coerceIn(0f, 1f)
+        val sTR = cornerSmoothConfig.topRight.coerceIn(0f, 1f)
+        val sBR = cornerSmoothConfig.bottomRight.coerceIn(0f, 1f)
+        val sBL = cornerSmoothConfig.bottomLeft.coerceIn(0f, 1f)
+
         fun bulgeAtEdge(t: Float, edge: Float) = min(width, height) * edge * 0.5f * sin(t * PI).toFloat()
 
         // --- TOP edge ---
@@ -75,11 +85,10 @@ class BulgedRectangleFullShape(
             right - radiiPx.topRight - topEdgeLength * 0.25f, top - bulgeAtEdge(0.75f, bulgeAmount.top),
             right - radiiPx.topRight, top
         )
-
         // TOP-RIGHT corner
         path.cubicTo(
-            right - radiiPx.topRight + radiiPx.topRight * C * (1 - s), top,
-            right, top + radiiPx.topRight - radiiPx.topRight * C * (1 - s),
+            right - radiiPx.topRight + radiiPx.topRight * C * (1 - sTR), top,
+            right, top + radiiPx.topRight - radiiPx.topRight * C * (1 - sTR),
             right, top + radiiPx.topRight
         )
 
@@ -90,11 +99,10 @@ class BulgedRectangleFullShape(
             right + bulgeAtEdge(0.75f, bulgeAmount.right), bottom - radiiPx.bottomRight - rightEdgeLength * 0.25f,
             right, bottom - radiiPx.bottomRight
         )
-
         // BOTTOM-RIGHT corner
         path.cubicTo(
-            right, bottom - radiiPx.bottomRight + radiiPx.bottomRight * C * (1 - s),
-            right - radiiPx.bottomRight + radiiPx.bottomRight * C * (1 - s), bottom,
+            right, bottom - radiiPx.bottomRight + radiiPx.bottomRight * C * (1 - sBR),
+            right - radiiPx.bottomRight + radiiPx.bottomRight * C * (1 - sBR), bottom,
             right - radiiPx.bottomRight, bottom
         )
 
@@ -105,11 +113,10 @@ class BulgedRectangleFullShape(
             left + radiiPx.bottomLeft + bottomEdgeLength * 0.25f, bottom + bulgeAtEdge(0.25f, bulgeAmount.bottom),
             left + radiiPx.bottomLeft, bottom
         )
-
         // BOTTOM-LEFT corner
         path.cubicTo(
-            left + radiiPx.bottomLeft - radiiPx.bottomLeft * C * (1 - s), bottom,
-            left, bottom - radiiPx.bottomLeft + radiiPx.bottomLeft * C * (1 - s),
+            left + radiiPx.bottomLeft - radiiPx.bottomLeft * C * (1 - sBL), bottom,
+            left, bottom - radiiPx.bottomLeft + radiiPx.bottomLeft * C * (1 - sBL),
             left, bottom - radiiPx.bottomLeft
         )
 
@@ -120,11 +127,10 @@ class BulgedRectangleFullShape(
             left - bulgeAtEdge(0.25f, bulgeAmount.left), top + radiiPx.topLeft + leftEdgeLength * 0.25f,
             left, top + radiiPx.topLeft
         )
-
         // TOP-LEFT corner
         path.cubicTo(
-            left, top + radiiPx.topLeft - radiiPx.topLeft * C * (1 - s),
-            left + radiiPx.topLeft - radiiPx.topLeft * C * (1 - s), top,
+            left, top + radiiPx.topLeft - radiiPx.topLeft * C * (1 - sTL),
+            left + radiiPx.topLeft - radiiPx.topLeft * C * (1 - sTL), top,
             left + radiiPx.topLeft, top
         )
 

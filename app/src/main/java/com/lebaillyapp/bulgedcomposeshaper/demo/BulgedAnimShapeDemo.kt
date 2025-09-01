@@ -2,8 +2,12 @@ package com.lebaillyapp.bulgedcomposeshaper.demo
 
 import android.graphics.BitmapFactory
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -24,42 +28,73 @@ import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRectangleSmoothShap
 import com.lebaillyapp.bulgedcomposeshaper.composable.BulgedImage3
 
 @Composable
-fun BulgedAnimShapeDemo(modifier: Modifier = Modifier) {
+fun BulgedAnimShapeDemo(
+    modifier: Modifier = Modifier,
+    idleMode: Boolean = true
+) {
     val context = LocalContext.current
     val imageBitmap: ImageBitmap = remember {
         BitmapFactory.decodeResource(context.resources, R.drawable.demopic).asImageBitmap()
     }
 
-    // Etat pressé ou pas
     var pressed by remember { mutableStateOf(false) }
 
-    // Animations synchronisées
-    val bulgeAnim by animateFloatAsState(
-        targetValue = if (pressed) 0.12f else -0.05f,
-        animationSpec = tween(300, easing = FastOutSlowInEasing),
-        label = "bulge"
-    )
-    val radiusAnim by animateDpAsState(
-        targetValue = if (pressed) 220.dp else 220.dp,
-        animationSpec = tween(300, easing = FastOutSlowInEasing),
-        label = "radius"
-    )
-    val smoothAnim by animateFloatAsState(
-        targetValue = if (pressed) 0.3f else -0.3f,
-        animationSpec = tween(300, easing = FastOutSlowInEasing),
-        label = "smooth"
-    )
+    // Valeurs animées
+    val (bulgeTarget, radiusTarget, smoothTarget) = if (idleMode) {
+        // Animation idle en boucle
+        val infiniteTransition = rememberInfiniteTransition()
+        val bulge by infiniteTransition.animateFloat(
+            initialValue = -0.00f,
+            targetValue = 0.10f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(3500, easing = FastOutSlowInEasing),
+                repeatMode = RepeatMode.Reverse
+            )
+        )
+        val radius by infiniteTransition.animateFloat(
+            initialValue = 220f,
+            targetValue = 220f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(3500, easing = FastOutSlowInEasing),
+                repeatMode = RepeatMode.Reverse
+            )
+        )
+        val radiusDp = radius.dp
 
-    // Shape dynamique
-    val shape = remember(bulgeAnim, radiusAnim, smoothAnim) {
+        val smooth by infiniteTransition.animateFloat(
+            initialValue = -0.40f,
+            targetValue = 0.50f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(3500, easing = FastOutSlowInEasing),
+                repeatMode = RepeatMode.Reverse
+            )
+        )
+        Triple(bulge, radiusDp, smooth)
+    } else {
+        // Press/release animation
+        val bulgeAnim by animateFloatAsState(
+            targetValue = if (pressed) -0.00f else 0.15f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+        val radiusAnim by animateDpAsState(
+            targetValue = if (pressed) 220.dp else 220.dp,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+        val smoothAnim by animateFloatAsState(
+            targetValue = if (pressed) -0.3f else 0.5f,
+            animationSpec = tween(300, easing = FastOutSlowInEasing)
+        )
+        Triple(bulgeAnim, radiusAnim, smoothAnim)
+    }
+
+    val shape = remember(bulgeTarget, radiusTarget, smoothTarget) {
         BulgedRectangleSmoothShape(
-            cornerRadius = radiusAnim,
-            bulgeAmount = bulgeAnim,
-            cornerSmoothFactor = smoothAnim
+            cornerRadius = radiusTarget,
+            bulgeAmount = bulgeTarget,
+            cornerSmoothFactor = smoothTarget
         )
     }
 
-    // Conteneur centré
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -69,21 +104,18 @@ fun BulgedAnimShapeDemo(modifier: Modifier = Modifier) {
     ) {
         Card(
             modifier = Modifier
-                .width(220.dp)
-                .height(220.dp)
+                .width(320.dp)
+                .height(320.dp)
                 .shadow(6.dp, shape)
-                .pointerInput(Unit) {
-                    detectTapGestures(
-                        onPress = {
-                            pressed = true
-                            try {
-                                // Attend que le doigt soit relâché
-                                awaitRelease()
-                            } finally {
-                                pressed = false
+                .pointerInput(idleMode) {
+                    if (!idleMode) {
+                        detectTapGestures(
+                            onPress = {
+                                pressed = true
+                                try { awaitRelease() } finally { pressed = false }
                             }
-                        }
-                    )
+                        )
+                    }
                 },
             shape = shape,
             colors = CardDefaults.cardColors(containerColor = Color.White),

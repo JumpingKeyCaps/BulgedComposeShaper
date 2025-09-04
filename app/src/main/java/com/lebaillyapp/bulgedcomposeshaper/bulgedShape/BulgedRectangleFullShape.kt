@@ -41,6 +41,46 @@ private data class CornerPx(
     val bottomLeft: Float
 )
 
+
+
+
+/**
+ * A custom [Shape] that draws a rectangle with independently rounded corners
+ * and optional bulging edges.
+ *
+ * The resulting outline is built with cubic Bézier curves, allowing:
+ * - Per-corner radius (in [Dp])
+ * - Per-corner smoothness control (`0f..1f`), to adjust how "round" or "sharp" the arc blends
+ * - Per-edge bulge factor (`-∞..+∞`), which pushes edges outward (positive) or inward (negative)
+ *
+ * Bulges are applied using a sine-based distortion relative to the edge length,
+ * scaled by the smallest dimension of the shape (width or height).
+ *
+ * ### Usage
+ * Use this when you want rounded rectangles with organic distortions,
+ * e.g. playful cards, animated blobs, or custom buttons.
+ *
+ * ### Parameters
+ * @property cornerRadius Per-corner radii in [Dp]. Controls how much each corner is rounded.
+ * @property bulgeAmount Per-edge bulge intensity.
+ * Values are floats where:
+ * - `0f` → no bulge (flat edge)
+ * - `>0f` → outward bump
+ * - `<0f` → inward dip
+ * Scaling is relative to half of the smallest dimension of the shape.
+ * @property cornerSmoothConfig Per-corner smoothing factor (`0f..1f`).
+ * Controls curvature of the rounded corner:
+ * - `0f` → sharp circular arc
+ * - `1f` → very smooth and wide transition
+ *
+ * ### Notes
+ * - All smoothness values are clamped into `[0f, 1f]`.
+ * - The algorithm uses a constant `C ≈ 0.55228` for Bézier circle approximation.
+ * - Bulges are applied symmetrically along each edge using a sine wave.
+ *
+ * @see Shape
+ * @see Outline.Generic
+ */
 class BulgedRectangleFullShape(
     private val cornerRadius: CornerConfig,
     val bulgeAmount: EdgeBulge,

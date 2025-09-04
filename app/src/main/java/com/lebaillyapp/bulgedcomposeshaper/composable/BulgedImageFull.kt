@@ -15,7 +15,34 @@ import androidx.compose.ui.layout.ContentScale
 import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRectangleFullShape
 import kotlin.math.max
 import kotlin.math.min
-
+/**
+ * A [Composable] that displays an [ImageBitmap] clipped into a custom
+ * bulged [Shape], with automatic zoom to compensate for edge deformation.
+ *
+ * This version supports both:
+ * - [BulgedRectangleFullShape] (per-edge bulges)
+ * - [BulgedRectangleSmoothShape] (uniform bulge)
+ *
+ * The maximum bulge among all edges is used to compute a zoom factor
+ * so the image fully covers the distorted outline without leaving gaps.
+ *
+ * #### Parameters
+ * @param bitmap The [ImageBitmap] to display.
+ * @param contentDescription Description of the image for accessibility.
+ * @param shape The clipping [Shape].
+ * Must be a [BulgedRectangleFullShape], [BulgedRectangleSmoothShape],
+ * or any other [Shape] (no bulge compensation will be applied in the latter case).
+ *
+ * #### Notes
+ * - Uses [ContentScale.Crop] to ensure coverage of the composable area.
+ * - The zoom factor is proportional to the largest bulge amount detected.
+ * - Safe to use with any [Shape], but only bulged shapes trigger scaling.
+ *
+ *
+ * @see BulgedRectangleFullShape
+ * @see com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRectangleSmoothShape
+ * @see androidx.compose.foundation.Image
+ */
 @Composable
 fun BulgedImageFull(
     bitmap: ImageBitmap,

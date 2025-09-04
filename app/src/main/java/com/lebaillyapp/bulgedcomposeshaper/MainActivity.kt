@@ -28,6 +28,38 @@ import com.lebaillyapp.bulgedcomposeshaper.demo.BulgedShapeDemo
 import com.lebaillyapp.bulgedcomposeshaper.demo.SmoothBlobImageDemo
 import com.lebaillyapp.bulgedcomposeshaper.ui.theme.BulgedComposeShaperTheme
 
+
+/**
+ * Main entry point of the BulgedComposeShaper demo app.
+ *
+ * ### Purpose
+ * This activity hosts multiple demos showcasing:
+ * 1. [BulgedShapeDemo] – static bulged shapes.
+ * 2. [BulgedAnimShapeDemo] – animated bulged rectangles reacting to touch or idle animation.
+ * 3. [BulgedAnimFullDemo] – animated full bulged rectangle with image clipping.
+ * 4. [SmoothBlobImageDemo] – interactive organic blob shape with customizable points, amplitude,
+ *    margin, and randomness (currently commented out but configurable via sliders).
+ *
+ * ### Layout
+ * - The root uses a [Scaffold] with padding and a background color.
+ * - Each demo is displayed inside a [Box] aligned to the center.
+ * - Sliders can control the blob demo parameters interactively:
+ *   - `pointCount` – number of points forming the blob
+ *   - `amplitude` – how much each point can vary
+ *   - `marginFactor` – shrinks the blob to avoid touching edges
+ *   - `randomFactor` – weight of randomness applied to radii
+ *
+ * ### Notes
+ * - Currently, the blob demo is commented out; uncomment to enable interactive controls.
+ * - The activity sets edge-to-edge content and uses [BulgedComposeShaperTheme] for styling.
+ * - Designed as a playground for testing shapes, animations, and clipping behaviors with images.
+ *
+ *
+ * @see BulgedShapeDemo
+ * @see BulgedAnimShapeDemo
+ * @see BulgedAnimFullDemo
+ * @see SmoothBlobImageDemo
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

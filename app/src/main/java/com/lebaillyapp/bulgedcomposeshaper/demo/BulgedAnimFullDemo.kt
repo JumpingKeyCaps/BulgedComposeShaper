@@ -17,6 +17,50 @@ import com.lebaillyapp.bulgedcomposeshaper.R
 import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.*
 import com.lebaillyapp.bulgedcomposeshaper.composable.BulgedImageFull
 
+/**
+ * Demo [Composable] showcasing the use of [BulgedImageFull] with a
+ * [BulgedRectangleFullShape].
+ *
+ * ### Behavior
+ * - Loads a demo image (`R.drawable.demopic`) into an [ImageBitmap].
+ * - Applies a custom bulged shape with:
+ *   - Corner radii ([CornerConfig])
+ *   - Per-edge bulges ([EdgeBulge])
+ *   - Corner smoothing ([CornerSmoothConfig])
+ * - Displays the image inside a [Card] that uses the same shape for both
+ *   clipping and shadow casting.
+ *
+ * ### Visual Effect
+ * The result is a clipped image with organic “bulged” edges, framed by a card
+ * container. The card has:
+ * - Fixed dimensions (220×220 dp)
+ * - Drop shadow applied using the same shape
+ * - White background color for contrast
+ *
+ * ### Parameters
+ * @param modifier The [Modifier] for external layout control.
+ *
+ * ### Notes
+ * - Currently, the shape parameters are hardcoded for demonstration.
+ * - The class name includes "Anim" since it's intended as a playground for
+ *   adding [animate*AsState] or [InfiniteTransition] later to animate
+ *   bulges, corners, or smoothness.
+ * - Useful for previews, prototyping, or verifying rendering of custom
+ *   bulged shapes with images.
+ *
+ * ### Example
+ * ```kotlin
+ * BulgedAnimFullDemo(
+ *     modifier = Modifier.fillMaxSize()
+ * )
+ * ```
+ *
+ * @see BulgedImageFull
+ * @see BulgedRectangleFullShape
+ * @see EdgeBulge
+ * @see CornerConfig
+ * @see CornerSmoothConfig
+ */
 @Composable
 fun BulgedAnimFullDemo(
     modifier: Modifier = Modifier

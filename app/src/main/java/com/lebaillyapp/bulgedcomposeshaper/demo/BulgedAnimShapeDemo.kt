@@ -27,6 +27,59 @@ import com.lebaillyapp.bulgedcomposeshaper.R
 import com.lebaillyapp.bulgedcomposeshaper.bulgedShape.BulgedRectangleSmoothShape
 import com.lebaillyapp.bulgedcomposeshaper.composable.BulgedImage3
 
+/**
+ * Demo [Composable] showing an animated [BulgedRectangleSmoothShape] applied
+ * to an image via [BulgedImage3].
+ *
+ * ### Behavior
+ * - Displays a `demopic` bitmap inside a [Card], clipped with a dynamic
+ *   [BulgedRectangleSmoothShape].
+ * - The shape parameters (bulge, radius, smooth factor) are animated
+ *   either in an infinite loop or in reaction to user input.
+ *
+ * ### Modes
+ * - **Idle mode** (`idleMode = true`):
+ *   - Uses [rememberInfiniteTransition] with [infiniteRepeatable] animations.
+ *   - Animates:
+ *     - `bulgeAmount` (currently constant at `-0.10f`, placeholder for variation)
+ *     - `cornerRadius` (fixed at `220.dp`, placeholder for variation)
+ *     - `cornerSmoothFactor` (loops between `-0.40f` and `0.50f`)
+ * - **Interactive mode** (`idleMode = false`):
+ *   - Reacts to press/release gestures via [detectTapGestures].
+ *   - On press:
+ *     - `bulgeAmount` → `0.00f`
+ *     - `cornerRadius` → `220.dp`
+ *     - `cornerSmoothFactor` → `-0.3f`
+ *   - On release: animates back to `0.15f`, `220.dp`, `0.5f`
+ *   - Transitions are smooth with [tween] + [FastOutSlowInEasing].
+ *
+ * ### Visual Effect
+ * The card continuously morphs its outline (idle mode) or responds
+ * interactively to touch (interactive mode), while the underlying
+ * image is clipped and scaled via [BulgedImage3].
+ *
+ * ### Parameters
+ * @param modifier External [Modifier] for layout control.
+ * @param idleMode If `true`, runs idle looping animation; if `false`, enables
+ * interactive press/release animations.
+ *
+ * ### Notes
+ * - The shape is recreated with [remember] whenever animation values change.
+ * - Current demo uses fixed size (220×220 dp) and shadow depth (6 dp).
+ * - Useful for visually testing animated bulged shapes in real-time.
+ *
+ * ### Example
+ * ```kotlin
+ * // Looping idle animation
+ * BulgedAnimShapeDemo(idleMode = true)
+ *
+ * // Interactive press/release animation
+ * BulgedAnimShapeDemo(idleMode = false)
+ * ```
+ *
+ * @see BulgedImage3
+ * @see BulgedRectangleSmoothShape
+ */
 @Composable
 fun BulgedAnimShapeDemo(
     modifier: Modifier = Modifier,

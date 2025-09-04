@@ -14,6 +14,41 @@ import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
 
+/**
+ * A custom [Shape] that draws a rectangle with uniform rounded corners
+ * and optionally bulging edges.
+ *
+ * Unlike [BulgedRectangleFullShape], this variant uses a single corner radius
+ * and a single bulge factor applied uniformly on all edges.
+ *
+ * The outline is constructed with cubic Bézier curves:
+ * - Corners use a smoothing factor (`0f..1f`) to control how round/sharp they appear
+ * - Edges can bulge outward (positive values) or inward (negative values)
+ *
+ * Bulges are distributed along edges using a sine wave, scaled by the smallest
+ * dimension of the shape.
+ *
+ * ### Parameters
+ * @property cornerRadius Uniform corner radius in [Dp].
+ * Clamped so that it never exceeds half of the shortest side.
+ * @property bulgeAmount Global bulge intensity applied to all edges.
+ * - `0f` → flat edges
+ * - `>0f` → outward bumps
+ * - `<0f` → inward dips
+ * The maximum displacement is proportional to half of the smallest dimension.
+ * @property cornerSmoothFactor Proportion (`0f..1f`) of the corner radius used to "pull" the tangent.
+ * - `0f` → sharp circular arc
+ * - `1f` → wide and soft curve
+ *
+ * ### Notes
+ * - The constant `C ≈ 0.55228` is used for circle approximation with Bézier curves.
+ * - Bulges are symmetric on each edge (`sin` distribution).
+ * - Best used for playful cards, blobs, or dynamic buttons when you want
+ *   a simpler alternative to [BulgedRectangleFullShape].
+ *
+ * @see Shape
+ * @see Outline.Generic
+ */
 class BulgedRectangleSmoothShape(
     private val cornerRadius: Dp,
     val bulgeAmount: Float = 0f,      // 0 = flat, positive = outward, negative = cave

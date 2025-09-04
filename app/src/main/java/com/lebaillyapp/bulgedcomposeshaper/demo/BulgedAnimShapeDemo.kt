@@ -30,7 +30,7 @@ import com.lebaillyapp.bulgedcomposeshaper.composable.BulgedImage3
 @Composable
 fun BulgedAnimShapeDemo(
     modifier: Modifier = Modifier,
-    idleMode: Boolean = false
+    idleMode: Boolean = true
 ) {
     val context = LocalContext.current
     val imageBitmap: ImageBitmap = remember {
@@ -44,8 +44,8 @@ fun BulgedAnimShapeDemo(
         // Animation idle en boucle
         val infiniteTransition = rememberInfiniteTransition()
         val bulge by infiniteTransition.animateFloat(
-            initialValue = -0.00f,
-            targetValue = 0.10f,
+            initialValue = -0.10f,
+            targetValue = -0.10f,
             animationSpec = infiniteRepeatable(
                 animation = tween(3500, easing = FastOutSlowInEasing),
                 repeatMode = RepeatMode.Reverse

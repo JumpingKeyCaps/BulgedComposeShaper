@@ -31,6 +31,14 @@ This shape can be applied to any `Composable` (like `Card`, `Surface`, or `Box`)
 
 ---
 
+## 📸 Screenshots
+
+| Bulged Shape Morphing | Shape Preview 1 | Shape Preview 2 | Touch Interaction |
+|:---:|:---:|:---:|:---:|
+| ![BSM](screenshots/bulgedShapeDemo1.gif) | ![SP1](screenshots/bulgedShapeDemo2.gif) |  ![SP2](screenshots/bulgedShapeDemo3.gif) |  ![TI](screenshots/bulgedShapeDemo4.gif) |
+
+---
+
 ## 🧪 Usage Example
 
 ```kotlin
@@ -92,12 +100,6 @@ BulgedImage(
 
 A visual example or animated demo will be added here soon.  
 Stay tuned 👀
-
----
-
-## 📜 License
-
-MIT — Free and open source. No restrictions.
 
 ---
 

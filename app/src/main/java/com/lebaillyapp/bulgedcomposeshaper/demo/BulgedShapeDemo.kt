@@ -47,7 +47,7 @@ fun BulgedShapeDemo(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     val imageBitmap: ImageBitmap = remember {
-        BitmapFactory.decodeResource(context.resources, R.drawable.demopic).asImageBitmap()
+        BitmapFactory.decodeResource(context.resources, R.drawable.demopic2).asImageBitmap()
     }
 
     var cornerRadiusDp by remember { mutableStateOf(111f) }

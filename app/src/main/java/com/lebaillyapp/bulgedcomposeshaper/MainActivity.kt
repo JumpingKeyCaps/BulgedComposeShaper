@@ -1,13 +1,19 @@
 package com.lebaillyapp.bulgedcomposeshaper
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -74,12 +80,12 @@ class MainActivity : ComponentActivity() {
                        // 1 - Simple use demo
                      //  BulgedShapeDemo(modifier = Modifier.align(Alignment.Center))
                        // 2 - Animated demo
-                       BulgedAnimShapeDemo(modifier = Modifier.align(Alignment.Center))
+                     //  BulgedAnimShapeDemo(modifier = Modifier.align(Alignment.Center))
                        // 3 - Animated demo with idle mode
-                 //      BulgedAnimFullDemo(modifier = Modifier.align(Alignment.Center))
+                     BulgedAnimFullDemo(modifier = Modifier.align(Alignment.Center))
 
                        // 4 - Animated demo blob
-                /**
+                       /**
                        val context = LocalContext.current
                        val imageBitmap: ImageBitmap = remember {
                            BitmapFactory.decodeResource(context.resources, R.drawable.demopic).asImageBitmap()
@@ -136,7 +142,7 @@ class MainActivity : ComponentActivity() {
                            )
                        }
 
-                    */
+                       */
 
 
 

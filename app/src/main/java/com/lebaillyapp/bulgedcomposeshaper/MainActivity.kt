@@ -80,9 +80,9 @@ class MainActivity : ComponentActivity() {
                        // 1 - Simple use demo
                      //  BulgedShapeDemo(modifier = Modifier.align(Alignment.Center))
                        // 2 - Animated demo
-                     //  BulgedAnimShapeDemo(modifier = Modifier.align(Alignment.Center))
+                       BulgedAnimShapeDemo(modifier = Modifier.align(Alignment.Center))
                        // 3 - Animated demo with idle mode
-                     BulgedAnimFullDemo(modifier = Modifier.align(Alignment.Center))
+                  //   BulgedAnimFullDemo(modifier = Modifier.align(Alignment.Center))
 
                        // 4 - Animated demo blob
                        /**

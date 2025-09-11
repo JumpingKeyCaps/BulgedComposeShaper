@@ -39,36 +39,6 @@ This shape can be applied to any `Composable` (like `Card`, `Surface`, or `Box`)
 
 ---
 
-## 🧪 Usage Example
-
-```kotlin
-val customShape = remember {
-    BulgedRoundedRectangleShape(
-        cornerRadius = 25.dp,
-        bulgeAmount = 0.03f // value between 1.0 and -1.0 : Positive = bulge, Negative = cave   
-    )
-}
-
-Card(
-    modifier = Modifier
-        .width(310.dp)
-        .height(310.dp),
-    shape = customShape,
-    colors = CardDefaults.cardColors(containerColor = Color(0xFFBABABA)),
-    elevation = CardDefaults.cardElevation(6.dp)
-)
-```
-
-for Images:
-
-```kotlin
-BulgedImage(
-    bitmap = myBitmap,
-    contentDescription = "Sample",
-    contentScale = ContentScale.Crop, // Critical!
-    shape = BulgedRoundedRectangleShape(20.dp, 0.02f)
-)
-```
 
 ## 🔮 Roadmap (WIP)
 
@@ -93,13 +63,6 @@ BulgedImage(
 - **Android Studio** (Giraffe or newer recommended)  
 - **Kotlin**  
 - **Jetpack Compose**  
-
----
-
-## 📸 Preview (coming soon)
-
-A visual example or animated demo will be added here soon.  
-Stay tuned 👀
 
 ---
 
